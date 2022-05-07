@@ -127,8 +127,8 @@ public class ReportAction extends ActionBase {
             }else {
                 // 登録中にエラーがなかった場合
 
-                // セッションに登録完了のフラッシュメッセージを設定
-                putRequestScope(AttributeConst.FLUSH,MessageConst.I_REGISTERED.getMessage());
+                // セッションに更新完了のフラッシュメッセージを設定
+                putSessionScope(AttributeConst.FLUSH,MessageConst.I_REGISTERED.getMessage());
 
                 // 一覧画面にリダイレクト
                 redirect(ForwardConst.ACT_REP,ForwardConst.CMD_INDEX);
@@ -220,7 +220,7 @@ public class ReportAction extends ActionBase {
                 putSessionScope(AttributeConst.FLUSH,MessageConst.I_UPDATED.getMessage());
 
                 // 一覧にリダイレクト
-                redirect(ForwardConst.ACT_EMP, ForwardConst.CMD_INDEX);
+                redirect(ForwardConst.ACT_REP, ForwardConst.CMD_INDEX);
             }
         }
     }
