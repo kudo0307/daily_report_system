@@ -7,6 +7,9 @@ public interface JpaConst {
     //データ取得件数の最大値
     int ROW_PER_PAGE = 15; //1ページに表示するレコードの数
 
+    // 現在の日付(Y-m-d)
+    String LOCAL_DATE_TIME_YMD = "localdatetime_ymd";
+
     //従業員テーブル
     String TABLE_EMP = "employees"; //テーブル名
     //従業員テーブルカラム
@@ -35,9 +38,25 @@ public interface JpaConst {
     String REP_COL_CREATED_AT = "created_at"; //登録日時
     String REP_COL_UPDATED_AT = "updated_at"; //更新日時
 
+    // タイムカードテーブル
+    String TABLE_TIM = "timecard"; // テーブル名
+    // タイムカードテーブルカラム
+    String TIM_COL_ID = "id"; // id
+    String TIM_COL_EMP = "employee_id"; // タイムカードを作成した従業員のid
+    String TIM_COL_ATD_AT = "attendance_at"; // 出勤時間
+    String TIM_COL_LEV_AT = "leaving_at"; // 退勤時間
+    String TIM_COL_REST_START_AT = "rest_start_at"; // 休憩開始時間
+    String TIM_COL_REST_END_AT = "rest_end_at"; // 休憩終了時間
+    String TIM_COL_WORK_AT = "work_at"; // 労働時間
+    String TIM_COL_REST_AT = "rest_at"; // 休憩時間
+    String TIM_COL_CREATED_AT = "created_at"; // 登録日時
+    String TIM_COL_UPDATED_AT = "updated_at"; // 更新日時
+    String TIM_COL_DELETED_AT = "deleted_at"; // 削除日時
+
     //Entity名
     String ENTITY_EMP = "employee"; //従業員
     String ENTITY_REP = "report"; //日報
+    String ENTITY_TIM = "timecard"; // タイムカード
 
     //JPQL内パラメータ
     String JPQL_PARM_CODE = "code"; //社員番号
@@ -69,6 +88,13 @@ public interface JpaConst {
     //指定した従業員が作成した日報の件数を取得する
     String Q_REP_COUNT_ALL_MINE = ENTITY_REP + ".countAllMine";
     String Q_REP_COUNT_ALL_MINE_DEF = "SELECT COUNT(r) FROM Report AS r WHERE r.employee = :" + JPQL_PARM_EMPLOYEE;
+    // 全てのタイムカードをidの降順に取得する
+    String Q_TIM_GET_ALL = ENTITY_TIM + ".getAll"; // name
+    String Q_TIM_GET_ALL_DEF = "SELECT t FROM Timecard AS t ORDER BY t.id DESC"; // query
+    // 当日のタイムカードをidの降順に取得する
+    String Q_TIM_GET_TODAY = ENTITY_TIM + ".getByAttendance";
+    String Q_TIM_GET_TODAY_DEF = "SELECT t FROM Timecard AS t WHERE DATE_FORMAT('t.attendance_at','%Y-%m-%d') : " + LOCAL_DATE_TIME_YMD + " ORDER BY t.id DESC";
+
 
 }
 
