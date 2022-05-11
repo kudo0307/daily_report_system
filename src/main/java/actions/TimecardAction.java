@@ -42,6 +42,7 @@ public class TimecardAction extends ActionBase {
         // 当日のタイムカードデータの件数を取得
         long timecardCount = service.countToday(today);
 
+
         putRequestScope(AttributeConst.TIMECARDS,timecards); // 取得したタイムカードデータ
         putRequestScope(AttributeConst.TIM_COUNT,timecardCount); // 全てのタイムカードデータの件数
         putRequestScope(AttributeConst.PAGE,page); // ページ数
