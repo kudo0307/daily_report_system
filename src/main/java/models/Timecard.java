@@ -27,7 +27,10 @@ import lombok.Setter;
             query = JpaConst.Q_TIM_GET_ALL_DEF),
     @NamedQuery(
             name = JpaConst.Q_TIM_GET_TODAY,
-            query = JpaConst.Q_TIM_GET_TODAY_DEF)
+            query = JpaConst.Q_TIM_GET_TODAY_DEF),
+    @NamedQuery(
+            name = JpaConst.Q_TIM_TODAY_COUNT,
+            query =   JpaConst.Q_TIM_TODAY_COUNT_DEF)
 })
 
 @Getter // 全てのクラスフィールドについてgetterを自動生成する(Lombok)
