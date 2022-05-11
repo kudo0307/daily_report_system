@@ -41,6 +41,20 @@ public enum AttributeConst {
     DEL_FLAG_TRUE(1),
     DEL_FLAG_FALSE(0),
 
+    // タイムカード
+    TIMECARD("timecard"),
+    TIMECARDS("timecards"),
+    TIM_COUNT("timecards_count"),
+    TIM_ID("id"),
+    TIM_EMPLOYEE_ID("employee_id"),
+    TIM_ATTENDANCE_AT("attendance_at"),
+    TIM_LEAVING_AT("leaving_at"),
+    TIM_REST_START_AT("rest_start_at"),
+    TIM_REST_END_AT("rest_end_at"),
+    TIM_WORK_AT("work_at"),
+    TIM_REST_AT("rest_at"),
+
+
     //日報管理
     REPORT("report"),
     REPORTS("reports"),

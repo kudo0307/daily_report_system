@@ -89,11 +89,17 @@ public interface JpaConst {
     String Q_REP_COUNT_ALL_MINE = ENTITY_REP + ".countAllMine";
     String Q_REP_COUNT_ALL_MINE_DEF = "SELECT COUNT(r) FROM Report AS r WHERE r.employee = :" + JPQL_PARM_EMPLOYEE;
     // 全てのタイムカードをidの降順に取得する
-    String Q_TIM_GET_ALL = ENTITY_TIM + ".getAll"; // name
-    String Q_TIM_GET_ALL_DEF = "SELECT t FROM Timecard AS t ORDER BY t.id DESC"; // query
+    String Q_TIM_GET_ALL = ENTITY_TIM + ".getAll";
+    String Q_TIM_GET_ALL_DEF = "SELECT t FROM Timecard AS t ORDER BY t.id DESC";
+    // 全てのタイムカードの件数を取得する
+    String Q_TIM_COUNT = ENTITY_TIM + ".count";
+    String Q_TIM_COUNT_DEF = "SELECT COUNT(t) FROM Timecard AS t";
     // 当日のタイムカードをidの降順に取得する
     String Q_TIM_GET_TODAY = ENTITY_TIM + ".getByAttendance";
-    String Q_TIM_GET_TODAY_DEF = "SELECT t FROM Timecard AS t WHERE DATE_FORMAT('t.attendance_at','%Y-%m-%d') : " + LOCAL_DATE_TIME_YMD + " ORDER BY t.id DESC";
+    String Q_TIM_GET_TODAY_DEF = "SELECT t FROM Timecard AS t WHERE DATE_FORMAT('t.attendance_at','%Y-%m-%d') = : " + LOCAL_DATE_TIME_YMD + " ORDER BY t.id DESC";
+    // 当日のタイムカードの件数を取得する
+    String Q_TIM_TODAY_COUNT = ENTITY_TIM + ".count";
+    String Q_TIM_TODAY_COUNT_DEF = "SELECT COUNT(t) FROM Timecard AS t WHERE DATE_FORMAT('t.attendance_at','%Y-%m-%d') = :" + LOCAL_DATE_TIME_YMD;
 
 
 }
