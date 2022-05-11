@@ -97,6 +97,16 @@ table#employee_list td{
     padding:10px 2%;
 }
 
+table#timecard_list th{
+    width: 30%;
+    padding:10px 2%;
+}
+
+table#timecard_list td{
+    width : 29%;
+    padding:10px 2%;
+}
+
 tr.row1{
     background-color:#f2f2f2;
 }
