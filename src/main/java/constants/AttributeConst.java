@@ -54,6 +54,15 @@ public enum AttributeConst {
     TIM_WORK_AT("work_at"),
     TIM_REST_AT("rest_at"),
 
+    NOW_DATE("now_date"), // 現在時刻
+    NOW_DATE_YMD("now_date_ymd"), // 現在時刻(yyyy年MM月dd日)
+    NOW_DATE_HMS("now_date_hms"), // 現在時刻(HH時mm分ss秒)
+    TIMECARD_TYPE("timecard_type"), // タイムカードの処理の種類
+    ATTENDANCE_BTN("attendance_btn"), // 出勤ボタン
+    LEAVING_BTN("leaving_btn"), // 退勤ボタン
+    REST_START_BTN("rest_start_btn"), // 休憩開始ボタン
+    REST_END_BTN("rest_end_btn"), // 休憩終了ボタン
+
 
     //日報管理
     REPORT("report"),

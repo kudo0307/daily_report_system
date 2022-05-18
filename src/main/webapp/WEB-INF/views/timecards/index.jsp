@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@ page import="constants.AttributeConst" %>
 <%@ page import="constants.ForwardConst" %>
 
@@ -20,7 +21,6 @@
             <tbody>
                 <tr>
                     <th>氏名</th>
-                    <th>日付</th>
                     <th>出勤時間</th>
                     <th>退勤時間</th>
                     <th>休憩開始</th>
@@ -30,32 +30,21 @@
                 </tr>
                 <c:forEach var="timecard" items="${timecards }" varStatus="status">
                     <tr class="row${status.count % 2}">
-                        <td>仮氏名</td>
-                        <td>ここに日付</td>
-                        <td><c:out value="${timecard.attendance_at}"></c:out></td>
-                        <td><c:out value="${timecard.leaving_at}"></c:out></td>
-                        <td><c:out value="${timecard.rest_start_at}"></c:out></td>
-                        <td><c:out value="${timecard.rest_end_at}"></c:out></td>
-                        <td><c:out value="${timecard.work_at}"></c:out></td>
-                        <td><c:out value="${timecard.rest_at}"></c:out></td>
+                        <td>${timecard.employee.name}</td>
+                        <fmt:parseDate  value="${timecard.attendance_at}" pattern="yyyy-MM-dd'T'HH:mm:ss"  var="attendanceAt" type="TIME"/>
+                        <td><fmt:formatDate value="${attendanceAt}" pattern="MM/dd HH:mm:ss" /></td>
+                        <fmt:parseDate  value="${timecard.leaving_at}" pattern="yyyy-MM-dd'T'HH:mm:ss"  var="leavingAt" type="TIME"/>
+                        <td><fmt:formatDate value="${leavingAt}" pattern="MM/dd HH:mm:ss" /></td>
+                        <fmt:parseDate  value="${timecard.rest_start_at}" pattern="yyyy-MM-dd'T'HH:mm:ss"  var="restStartAt" type="TIME"/>
+                        <td><fmt:formatDate value="${restStartAt}" pattern="HH:mm:ss" /></td>
+                        <fmt:parseDate  value="${timecard.rest_end_at}" pattern="yyyy-MM-dd'T'HH:mm:ss"  var="restEndAt" type="TIME"/>
+                        <td><fmt:formatDate value="${restEndAt}" pattern="HH:mm:ss" /></td>
+                        <td>${timecard.work_at }</td>
+                        <td>${timecard.rest_at }</td>
                     </tr>
                 </c:forEach>
             </tbody>
         </table>
-
-        <div id="pagination">
-            (全${timecards_count}件)<br />
-            <c:forEach var="i" begin="1" end="${((timecards_count - 1) / maxRow)+1 }" step="1">
-                <c:choose>
-                    <c:when test="${i == page }">
-                        <c:out value="${i}" />&nbsp;
-                    </c:when>
-                    <c:otherwise>
-                        <a href="<c:url value='?action=${actTim}&command=${commIdx}&page=${i}' />"><c:out value="${i}"></c:out></a>&nbsp;
-                    </c:otherwise>
-                </c:choose>
-            </c:forEach>
-        </div>
 
         <p><a href="<c:url value='?action=${actTim}&command=${commEdit}' />">タイムカード</a></p>
     </c:param>

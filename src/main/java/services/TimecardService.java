@@ -14,9 +14,9 @@ import models.validators.TimecardValidator;
 // タイムカードテーブルにかかわる処理を行うクラス
 public class TimecardService extends ServiceBase {
     // 指定されたページ数の一覧画面に表示する出勤日が当日のデータを取得し、TimecardViewのリストで返却する
-    // @param page ページ数
+    // @param today 当日の日付
     // @return 表示するデータのリスト
-    public List<TimecardView> getTodayPerPage(String today,int page){
+    public List<TimecardView> getTodayTimecard(String today){
 
 
         List<Timecard> t = null;
@@ -25,9 +25,7 @@ public class TimecardService extends ServiceBase {
 
 
             t = em.createNamedQuery(JpaConst.Q_TIM_GET_TODAY,Timecard.class)
-                    .setParameter(JpaConst.LOCAL_DATE_TIME_YMD,today )
-                    .setFirstResult(JpaConst.ROW_PER_PAGE * (page - 1))
-                    .setMaxResults(JpaConst.ROW_PER_PAGE)
+                    .setParameter(JpaConst.NOW_DATE_YMD,today )
                     .getResultList();
         }catch(NoResultException ex) {
 
@@ -41,7 +39,7 @@ public class TimecardService extends ServiceBase {
     // @return タイムカードテーブルのデータの件数
     public long countToday(String today) {
         long timCount = (long) em.createNamedQuery(JpaConst.Q_TIM_TODAY_COUNT,Long.class)
-                .setParameter(JpaConst.LOCAL_DATE_TIME_YMD,today )
+                .setParameter(JpaConst.NOW_DATE_YMD,today )
                 .getSingleResult();
 
         return timCount;
@@ -49,10 +47,25 @@ public class TimecardService extends ServiceBase {
 
 
     // 従業員idを条件に取得したデータをTimecardViewのインスタンスで返却する
+    // @param id タイムカードのid
+    // @return 取得データのインスタンス
+    public TimecardView findOne(int id) {
+        Timecard t = findOneInternal(id);
+        return TimecardConverter.toView(t);
+    }
+
+    // 従業員idを条件に取得したデータをTimecardViewのインスタンスで返却する
     // @param empId 従業員id
     // @return 取得データのインスタンス
-    public TimecardView findOne(int empId) {
-        Timecard t = findOneInternal(empId);
+    public TimecardView getTodayTimecard(int empId) {
+        Timecard t = null;
+        try {
+            t = em.createNamedQuery(JpaConst.Q_TIM_TODAY_TIMECARD,Timecard.class)
+                    .setParameter(JpaConst.TIM_COL_EMP, empId)
+                    .getSingleResult();
+        }catch(NoResultException ex) {
+
+        }
         return TimecardConverter.toView(t);
     }
 
@@ -115,11 +128,11 @@ public class TimecardService extends ServiceBase {
 
 
 
-    // 従業員idを条件にデータを1件取得し、Timecardのインスタンスで返却する
-    // @param empId 従業員id
+    // idを条件にデータを1件取得し、Timecardのインスタンスで返却する
+    // @param id タイムカードのid
     // @return 取得データのインスタンス
-    private Timecard findOneInternal(int empId) {
-        Timecard t = em.find(Timecard.class, empId);
+    private Timecard findOneInternal(int id) {
+        Timecard t = em.find(Timecard.class, id);
 
         return t;
     }

@@ -8,6 +8,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
@@ -30,7 +32,10 @@ import lombok.Setter;
             query = JpaConst.Q_TIM_GET_TODAY_DEF),
     @NamedQuery(
             name = JpaConst.Q_TIM_TODAY_COUNT,
-            query =   JpaConst.Q_TIM_TODAY_COUNT_DEF)
+            query =   JpaConst.Q_TIM_TODAY_COUNT_DEF),
+    @NamedQuery(
+            name = JpaConst.Q_TIM_TODAY_TIMECARD,
+            query = JpaConst.Q_TIM_TODAY_TIMECARD_DEF)
 })
 
 @Getter // 全てのクラスフィールドについてgetterを自動生成する(Lombok)
@@ -47,15 +52,16 @@ public class Timecard {
     private Integer id;
 
     // 日報を作成した従業員のid
-    @Column(name = JpaConst.TIM_COL_EMP,nullable = false)
-    private Integer employee_id;
+    @ManyToOne
+    @JoinColumn(name = JpaConst.TIM_COL_EMP,nullable = false)
+    private Employee employee;
 
     // 出勤時間
-    @Column(name = JpaConst.TIM_COL_ATD_AT,nullable = false)
+    @Column(name = JpaConst.TIM_COL_ATD_AT)
     private LocalDateTime attendance_at;
 
     // 退勤時間
-    @Column(name = JpaConst.TIM_COL_LEV_AT, nullable = false)
+    @Column(name = JpaConst.TIM_COL_LEV_AT)
     private LocalDateTime leaving_at;
 
     // 休憩開始時間
@@ -67,8 +73,8 @@ public class Timecard {
     private LocalDateTime rest_end_at;
 
     // 労働時間
-    @Column(name = JpaConst.TIM_COL_WORK_AT, nullable = false)
-    private LocalDateTime work_at;
+    @Column(name = JpaConst.TIM_COL_WORK_AT)
+    private LocalTime work_at;
 
     // 休憩時間
     @Column(name = JpaConst.TIM_COL_REST_AT)

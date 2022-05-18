@@ -7,9 +7,6 @@ public interface JpaConst {
     //データ取得件数の最大値
     int ROW_PER_PAGE = 15; //1ページに表示するレコードの数
 
-    // 現在の日付(Y-m-d)
-    String LOCAL_DATE_TIME_YMD = "localdatetime_ymd";
-
     //従業員テーブル
     String TABLE_EMP = "employees"; //テーブル名
     //従業員テーブルカラム
@@ -52,6 +49,18 @@ public interface JpaConst {
     String TIM_COL_CREATED_AT = "created_at"; // 登録日時
     String TIM_COL_UPDATED_AT = "updated_at"; // 更新日時
     String TIM_COL_DELETED_AT = "deleted_at"; // 削除日時
+
+    String NOW_DATE = "now_date"; // 現在時刻
+    String NOW_DATE_YMD = "now_date_ymd"; // 現在時刻(yyyy-MM-dd)
+
+    String TIMECARD_TYPE = "timecard_type"; // タイムカードの処理の種類
+    String ATTENDANCE_BTN = "attendance_btn"; // 出勤ボタン
+    String LEAVING_BTN = "leaving_btn"; // 退勤ボタン
+    String REST_START_BTN = "rest_start_btn"; // 休憩開始ボタン
+    String REST_END_BTN = "rest_end_btn"; // 休憩終了ボタン
+
+    int ADD_REST_END_AT = 1; // 休憩終了時間を自動で計算するときの時間(hour)
+
 
     //Entity名
     String ENTITY_EMP = "employee"; //従業員
@@ -96,11 +105,13 @@ public interface JpaConst {
     String Q_TIM_COUNT_DEF = "SELECT COUNT(t) FROM Timecard AS t";
     // 当日のタイムカードをidの降順に取得する
     String Q_TIM_GET_TODAY = ENTITY_TIM + ".getByAttendance";
-    String Q_TIM_GET_TODAY_DEF = "SELECT t FROM Timecard AS t WHERE DATE_FORMAT('t.attendance_at','%Y-%m-%d') = : " + LOCAL_DATE_TIME_YMD + " ORDER BY t.id DESC";
+    String Q_TIM_GET_TODAY_DEF = "SELECT t FROM Timecard AS t WHERE DATE_FORMAT(t.attendance_at,'%Y-%m-%d') = : " + NOW_DATE_YMD + " ORDER BY t.id DESC";
     // 当日のタイムカードの件数を取得する
     String Q_TIM_TODAY_COUNT = ENTITY_TIM + ".count";
-    String Q_TIM_TODAY_COUNT_DEF = "SELECT COUNT(t) FROM Timecard AS t WHERE DATE_FORMAT('t.attendance_at','%Y-%m-%d') = :" + LOCAL_DATE_TIME_YMD;
-
+    String Q_TIM_TODAY_COUNT_DEF = "SELECT COUNT(t) FROM Timecard AS t WHERE DATE_FORMAT(t.attendance_at,'%Y-%m-%d') = :" + NOW_DATE_YMD;
+    // 指定した従業員の退勤時間が登録されていないタイムカードデータを取得する
+    String Q_TIM_TODAY_TIMECARD = ENTITY_TIM + ".getMine";
+    String Q_TIM_TODAY_TIMECARD_DEF = "SELECT t FROM Timecard AS t WHERE t.leaving_at = NULL AND t.employee.id =:" + TIM_COL_EMP;
 
 }
 

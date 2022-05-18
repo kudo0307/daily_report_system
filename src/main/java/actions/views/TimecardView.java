@@ -20,7 +20,7 @@ public class TimecardView {
     private Integer id;
 
     //日報を作成した従業員のid
-    private Integer employee_id;
+    private EmployeeView employee;
 
     // 出勤時間
     private LocalDateTime attendance_at;
@@ -35,7 +35,7 @@ public class TimecardView {
     private LocalDateTime rest_end_at;
 
     // 労働時間
-    private LocalDateTime work_at;
+    private LocalTime work_at;
 
     // 休憩時間
     private LocalTime rest_at;

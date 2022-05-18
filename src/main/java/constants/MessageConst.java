@@ -11,6 +11,12 @@ public enum MessageConst {
     I_UPDATED("更新が完了しました。"),
     I_DELETED("削除が完了しました。"),
 
+    // タイムカード
+    T_ATTENDANCE("出勤しました"),
+    T_LEAVING("退勤しました"),
+    T_REST_START("休憩開始しました"),
+    T_REST_END("休憩終了しました"),
+
     //バリデーション
     E_NONAME("氏名を入力してください。"),
     E_NOPASSWORD("パスワードを入力してください。"),

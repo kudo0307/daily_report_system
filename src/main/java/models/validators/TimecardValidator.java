@@ -1,5 +1,6 @@
 package models.validators;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,9 +17,22 @@ public class TimecardValidator {
     public static List<String> validate(TimecardService service, TimecardView tv){
         List<String> errors = new ArrayList<String>();
 
-        //
-
         return errors;
+    }
+
+    // LocalDateTimeにparseできるか判定
+    // @param at 出勤時間
+    // @return true : 正しい値 , false : 不正な値
+    public static Boolean checkDateTime(String at) {
+
+        try {
+            LocalDateTime castAt = LocalDateTime.parse(at);
+        }catch (Exception e){
+            return false;
+        }
+
+
+        return true;
     }
 
 

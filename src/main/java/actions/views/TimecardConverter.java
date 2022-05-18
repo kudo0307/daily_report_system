@@ -16,7 +16,7 @@ public class TimecardConverter {
 
         return new Timecard(
                 tv.getId(),
-                tv.getEmployee_id(),
+                EmployeeConverter.toModel(tv.getEmployee()),
                 tv.getAttendance_at(),
                 tv.getLeaving_at(),
                 tv.getRest_start_at(),
@@ -38,9 +38,11 @@ public class TimecardConverter {
             return null;
         }
 
+
+
         return new TimecardView(
                 t.getId(),
-                t.getEmployee_id(),
+                EmployeeConverter.toView(t.getEmployee()),
                 t.getAttendance_at(),
                 t.getLeaving_at(),
                 t.getRest_start_at(),
@@ -73,7 +75,7 @@ public class TimecardConverter {
     // @param tv Viewモデル(コピー先)
     public static void copyViewToModel(Timecard t,TimecardView tv) {
         t.setId(tv.getId());
-        t.setEmployee_id(tv.getEmployee_id());
+        t.setEmployee(EmployeeConverter.toModel(tv.getEmployee()));
         t.setAttendance_at(tv.getAttendance_at());
         t.setLeaving_at(tv.getLeaving_at());
         t.setRest_start_at(tv.getRest_start_at());
