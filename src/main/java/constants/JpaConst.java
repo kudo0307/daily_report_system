@@ -60,6 +60,7 @@ public interface JpaConst {
     String REST_END_BTN = "rest_end_btn"; // 休憩終了ボタン
 
     int ADD_REST_END_AT = 1; // 休憩終了時間を自動で計算するときの時間(hour)
+    int POSSIBLE_MIN_MINUTE = 10; // 登録可能な時間のずれ(10分)
 
 
     //Entity名

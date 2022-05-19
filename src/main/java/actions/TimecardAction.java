@@ -76,7 +76,7 @@ public class TimecardAction extends ActionBase {
 
 
         // 現在時刻を生成
-        LocalDateTime localDateTime = LocalDateTime.now();
+        LocalDateTime now = LocalDateTime.now();
 
         String now_date_ymd = getToday("yyyy年MM月dd日");
         String now_date_hms = getToday("HH:mm:ss");
@@ -84,7 +84,7 @@ public class TimecardAction extends ActionBase {
 
         putRequestScope(AttributeConst.TOKEN, getTokenId()); // CSRF対策用トークン
         putRequestScope(AttributeConst.TIMECARD, tv); // 取得したタイムカードデータ
-        putRequestScope(AttributeConst.NOW_DATE,localDateTime); // 現在時刻
+        putRequestScope(AttributeConst.NOW_DATE,now); // 現在時刻
         putRequestScope(AttributeConst.NOW_DATE_YMD,now_date_ymd); // 現在時刻(yyyy年MM月dd日)
         putRequestScope(AttributeConst.NOW_DATE_HMS,now_date_hms); // 現在時刻(HH:mm:ss)
 
@@ -124,13 +124,11 @@ public class TimecardAction extends ActionBase {
                             return;
                         }
 
-                        // タイムカードのインスタンス作成
-                        TimecardView saveTv = new TimecardView();
-
                         // 出勤時間をStringからLocalDatetimeに変換
                         LocalDateTime castAttendanceAt = LocalDateTime.parse(attendanceAt);
 
-
+                        // タイムカードのインスタンス作成
+                        TimecardView saveTv = new TimecardView();
 
                         saveTv.setEmployee(ev); // 従業員idをセット
                         saveTv.setAttendance_at(castAttendanceAt);// 出勤時間をセット
@@ -164,16 +162,35 @@ public class TimecardAction extends ActionBase {
                 case JpaConst.LEAVING_BTN: // 退勤
                         if(tv != null && tv.getLeaving_at()==null) {
                             LocalDateTime attendanceAt = tv.getAttendance_at(); // 出勤時間
-                            LocalDateTime leavingAt = null; // 退勤時間
+                            String leavingAt = getRequestParam(AttributeConst.TIM_LEAVING_AT); // 退勤時間
                             LocalDateTime restStartAt = tv.getRest_start_at(); // 休憩開始時間
                             LocalDateTime restEndAt = tv.getRest_end_at(); // 休憩終了時間
                             LocalTime workAt = null; // 労働時間
                             LocalTime restAt = tv.getRest_at(); // 休憩時間
 
 
+                            // 退勤時間が正しい値か判定
+                            if(!TimecardValidator.checkDateTime(leavingAt)) {
+
+                                // 正しくなければ
+                                // エラー画面を表示
+                                forward(ForwardConst.FW_ERR_UNKNOWN);
+                                return;
+                            }
+
                             // 退勤時間をStringからLocalDatetimeに変換
-                            leavingAt = LocalDateTime.parse(getRequestParam(AttributeConst.TIM_LEAVING_AT));
-                            tv.setLeaving_at(leavingAt); // 退勤時間をセット
+                            LocalDateTime castLeavingAt = LocalDateTime.parse(leavingAt);
+
+
+                            if(castLeavingAt.isBefore(attendanceAt)) {
+                                // 退勤時間が出勤時間より前を入力していたら
+
+                                // エラー画面を表示
+                                forward(ForwardConst.FW_ERR_UNKNOWN);
+                                return;
+                            }
+
+                            tv.setLeaving_at(castLeavingAt); // 退勤時間をセット
 
                             if(restStartAt !=null && restEndAt == null) {
                                 // 休憩開始時間が登録されていて、休憩終了時間が登録されていない場合
@@ -193,7 +210,7 @@ public class TimecardAction extends ActionBase {
 
                             // 労働時間
 
-                            workAt = getDiffLocalDateTime(attendanceAt, leavingAt); // 労働時間
+                            workAt = getDiffLocalDateTime(attendanceAt, castLeavingAt); // 労働時間
 
                             if(restAt != null) {
                                 // 休憩時間があったら
@@ -238,10 +255,22 @@ public class TimecardAction extends ActionBase {
                     break;
                 case JpaConst.REST_START_BTN: // 休憩開始
                     if(tv!=null && tv.getRest_start_at() == null && tv.getRest_end_at() == null) {
-                        // 休憩開始時間をStringからLocalDatetimeに変換
-                        LocalDateTime restStartAt = LocalDateTime.parse(getRequestParam(AttributeConst.TIM_REST_START_AT));
 
-                        tv.setRest_start_at(restStartAt);
+                        String restStartAt = getRequestParam(AttributeConst.TIM_REST_START_AT); // 休憩開始時間
+
+                        // 休憩開始時間が正しい値か判定
+                        if(!TimecardValidator.checkDateTime(restStartAt)) {
+
+                            // 正しくなければ
+                            // エラー画面を表示
+                            forward(ForwardConst.FW_ERR_UNKNOWN);
+                            return;
+                        }
+
+                        // 休憩開始時間をStringからLocalDatetimeに変換
+                        LocalDateTime castRestStartAt = LocalDateTime.parse(restStartAt);
+
+                        tv.setRest_start_at(castRestStartAt);
 
                         List<String> errors = service.update(tv); // データ更新
 
@@ -271,15 +300,36 @@ public class TimecardAction extends ActionBase {
                 case JpaConst.REST_END_BTN: // 休憩終了
                     if(tv != null && tv.getRest_start_at() != null && tv.getRest_end_at() ==null && tv.getLeaving_at() ==null) {
 
-                        // 休憩開始時間を取得
-                        LocalDateTime restStartAt = tv.getRest_start_at();
+                        String restEndAt = getRequestParam(AttributeConst.TIM_REST_END_AT); // 休憩終了時間
+
+                        // 休憩開始時間が正しい値か判定
+                        if(!TimecardValidator.checkDateTime(restEndAt)) {
+
+                            // 正しくなければ
+                            // エラー画面を表示
+                            forward(ForwardConst.FW_ERR_UNKNOWN);
+                            return;
+                        }
 
                         // 休憩終了時間をStringからLocalDateTimeに変換
-                        LocalDateTime restEndAt = LocalDateTime.parse(getRequestParam(AttributeConst.TIM_REST_END_AT));
-                        tv.setRest_end_at(restEndAt);
+                        LocalDateTime castRestEndAt = LocalDateTime.parse(restEndAt);
 
-                        LocalTime restAt = getDiffLocalDateTime(restStartAt,restEndAt);
+
+                        LocalDateTime restStartAt = tv.getRest_start_at();// 休憩開始時間
+
+                        if(castRestEndAt.isBefore(restStartAt)) {
+                            // 退勤時間が出勤時間より前を入力していたら
+
+                            // エラー画面を表示
+                            forward(ForwardConst.FW_ERR_UNKNOWN);
+                            return;
+                        }
+
+                        LocalTime restAt = getDiffLocalDateTime(restStartAt,castRestEndAt);
+
+                        tv.setRest_end_at(castRestEndAt); // 休憩終了時間をセット
                         tv.setRest_at(restAt); // 休憩時間をセット
+
 
                         List<String> errors = service.update(tv); // データ更新
 
@@ -387,8 +437,5 @@ public class TimecardAction extends ActionBase {
     public int getSecond(int s) {
         return s % 60;
     }
-
-
-
 
 }
