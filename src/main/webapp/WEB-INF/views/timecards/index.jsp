@@ -32,14 +32,14 @@
                     <tr class="row${status.count % 2}">
                         <td>${timecard.employee.name}</td>
                         <fmt:parseDate  value="${timecard.attendance_at}" pattern="yyyy-MM-dd'T'HH:mm:ss"  var="attendanceAt" type="TIME"/>
-                        <td><fmt:formatDate value="${attendanceAt}" pattern="MM/dd HH:mm:ss" /></td>
+                        <td><fmt:formatDate value="${attendanceAt}" pattern="MM/dd HH:mm" /></td>
                         <fmt:parseDate  value="${timecard.leaving_at}" pattern="yyyy-MM-dd'T'HH:mm:ss"  var="leavingAt" type="TIME"/>
-                        <td><fmt:formatDate value="${leavingAt}" pattern="MM/dd HH:mm:ss" /></td>
+                        <td><fmt:formatDate value="${leavingAt}" pattern="MM/dd HH:mm" /></td>
                         <fmt:parseDate  value="${timecard.rest_start_at}" pattern="yyyy-MM-dd'T'HH:mm:ss"  var="restStartAt" type="TIME"/>
-                        <td><fmt:formatDate value="${restStartAt}" pattern="HH:mm:ss" /></td>
+                        <td><fmt:formatDate value="${restStartAt}" pattern="HH:mm" /></td>
                         <fmt:parseDate  value="${timecard.rest_end_at}" pattern="yyyy-MM-dd'T'HH:mm:ss"  var="restEndAt" type="TIME"/>
-                        <td><fmt:formatDate value="${restEndAt}" pattern="HH:mm:ss" /></td>
-                        <td>${timecard.work_at }</td>
+                        <td><fmt:formatDate value="${restEndAt}" pattern="HH:mm" /></td>
+                        <td>${timecard.work_at}</td>
                         <td>${timecard.rest_at }</td>
                     </tr>
                 </c:forEach>

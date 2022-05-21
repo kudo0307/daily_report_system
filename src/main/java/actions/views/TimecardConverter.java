@@ -1,5 +1,6 @@
 package actions.views;
 
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -39,6 +40,18 @@ public class TimecardConverter {
         }
 
 
+        // 労働時間を時:分に変える
+        LocalTime workAt = t.getWork_at();
+        if(workAt != null) {
+            workAt = LocalTime.of(workAt.getHour(), workAt.getMinute());
+        }
+
+        // 休憩時間を時:分に変える
+        LocalTime restAt = t.getRest_at();
+        if(restAt != null) {
+            restAt = LocalTime.of(restAt.getHour(), restAt.getMinute());
+        }
+
 
         return new TimecardView(
                 t.getId(),
@@ -47,8 +60,8 @@ public class TimecardConverter {
                 t.getLeaving_at(),
                 t.getRest_start_at(),
                 t.getRest_end_at(),
-                t.getWork_at(),
-                t.getRest_at(),
+                workAt,
+                restAt,
                 t.getCreated_at(),
                 t.getUpdated_at(),
                 t.getDeleted_at()
