@@ -133,26 +133,14 @@ public class TimecardAction extends ActionBase {
                         saveTv.setEmployee(ev); // 従業員idをセット
                         saveTv.setAttendance_at(castAttendanceAt);// 出勤時間をセット
 
-                        List<String> errors = service.create(saveTv); // データ登録
+                        service.create(saveTv); // データ登録
 
-                        if(errors.size() > 0) {
-                            // 登録中にエラーがあった場合
+                        // セッションに登録完了のフラッシュメッセージを設定
+                        putSessionScope(AttributeConst.FLUSH,MessageConst.T_ATTENDANCE.getMessage());
 
-                            putRequestScope(AttributeConst.TOKEN, getTokenId()); // CSRF対策用トークン
-                            putRequestScope(AttributeConst.ERR,errors); // エラーのリスト
+                        // 一覧画面にリダイレクト
+                        redirect(ForwardConst.ACT_TIM,ForwardConst.CMD_INDEX);
 
-                            // タイムカード登録画面を再表示
-                            forward(ForwardConst.FW_TIM_EDIT);
-
-                        }else {
-                            // 登録中にエラーがなかった場合
-
-                            // セッションに登録完了のフラッシュメッセージを設定
-                            putSessionScope(AttributeConst.FLUSH,MessageConst.T_ATTENDANCE.getMessage());
-
-                            // 一覧画面にリダイレクト
-                            redirect(ForwardConst.ACT_TIM,ForwardConst.CMD_INDEX);
-                        }
                     }else {
                         // エラー画面を表示
                         forward(ForwardConst.FW_ERR_UNKNOWN);
@@ -228,26 +216,14 @@ public class TimecardAction extends ActionBase {
 
                             tv.setWork_at(workAt); // 労働時間をセット
 
-                            List<String> errors = service.update(tv); // データ更新
+                            service.update(tv); // データ更新
 
-                            if(errors.size() > 0) {
-                                // 更新中にエラーがあった場合
+                            // セッションに登録完了のフラッシュメッセージを設定
+                            putSessionScope(AttributeConst.FLUSH,MessageConst.T_LEAVING.getMessage());
 
-                                putRequestScope(AttributeConst.TOKEN, getTokenId()); // CSRF対策用トークン
-                                putRequestScope(AttributeConst.ERR,errors); // エラーのリスト
+                            // 一覧画面にリダイレクト
+                            redirect(ForwardConst.ACT_TIM,ForwardConst.CMD_INDEX);
 
-                                // タイムカード登録画面を再表示
-                                forward(ForwardConst.FW_TIM_EDIT);
-
-                            }else {
-                                // 更新中にエラーがなかった場合
-
-                                // セッションに登録完了のフラッシュメッセージを設定
-                                putSessionScope(AttributeConst.FLUSH,MessageConst.T_LEAVING.getMessage());
-
-                                // 一覧画面にリダイレクト
-                                redirect(ForwardConst.ACT_TIM,ForwardConst.CMD_INDEX);
-                            }
                         }else {
                             // エラー画面を表示
                             forward(ForwardConst.FW_ERR_UNKNOWN);
@@ -272,25 +248,14 @@ public class TimecardAction extends ActionBase {
 
                         tv.setRest_start_at(castRestStartAt);
 
-                        List<String> errors = service.update(tv); // データ更新
+                        service.update(tv); // データ更新
 
-                        if(errors.size() > 0) {
-                            // 更新中にエラーがあった場合
+                        // セッションに登録完了のフラッシュメッセージを設定
+                        putSessionScope(AttributeConst.FLUSH,MessageConst.T_REST_START.getMessage());
 
-                            putRequestScope(AttributeConst.TOKEN, getTokenId()); // CSRF対策用トークン
-                            putRequestScope(AttributeConst.ERR,errors); // エラーのリスト
+                        // 一覧画面にリダイレクト
+                        redirect(ForwardConst.ACT_TIM,ForwardConst.CMD_INDEX);
 
-                            // タイムカード登録画面を再表示
-                            forward(ForwardConst.FW_TIM_EDIT);
-                        }else {
-                            // 更新中にエラーがなかった場合
-
-                            // セッションに登録完了のフラッシュメッセージを設定
-                            putSessionScope(AttributeConst.FLUSH,MessageConst.T_REST_START.getMessage());
-
-                            // 一覧画面にリダイレクト
-                            redirect(ForwardConst.ACT_TIM,ForwardConst.CMD_INDEX);
-                        }
 
                     }else {
                         // エラー画面を表示
@@ -331,25 +296,14 @@ public class TimecardAction extends ActionBase {
                         tv.setRest_at(restAt); // 休憩時間をセット
 
 
-                        List<String> errors = service.update(tv); // データ更新
+                        service.update(tv); // データ更新
 
-                        if(errors.size() > 0) {
-                            // 更新中にエラーがあった場合
+                        // セッションに登録完了のフラッシュメッセージを設定
+                        putSessionScope(AttributeConst.FLUSH,MessageConst.T_REST_END.getMessage());
 
-                            putRequestScope(AttributeConst.TOKEN, getTokenId()); // CSRF対策用トークン
-                            putRequestScope(AttributeConst.ERR,errors); // エラーのリスト
+                        // 一覧画面にリダイレクト
+                        redirect(ForwardConst.ACT_TIM,ForwardConst.CMD_INDEX);
 
-                            // タイムカード登録画面を再表示
-                            forward(ForwardConst.FW_TIM_EDIT);
-                        }else {
-                            // 更新中にエラーがなかった場合
-
-                            // セッションに登録完了のフラッシュメッセージを設定
-                            putSessionScope(AttributeConst.FLUSH,MessageConst.T_REST_END.getMessage());
-
-                            // 一覧画面にリダイレクト
-                            redirect(ForwardConst.ACT_TIM,ForwardConst.CMD_INDEX);
-                        }
                     }else {
                         // エラー画面を表示
                         forward(ForwardConst.FW_ERR_UNKNOWN);

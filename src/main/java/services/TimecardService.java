@@ -9,7 +9,6 @@ import actions.views.TimecardConverter;
 import actions.views.TimecardView;
 import constants.JpaConst;
 import models.Timecard;
-import models.validators.TimecardValidator;
 
 // タイムカードテーブルにかかわる処理を行うクラス
 public class TimecardService extends ServiceBase {
@@ -71,32 +70,23 @@ public class TimecardService extends ServiceBase {
 
     // タイムカードの登録内容を元にデータを一軒作成し、タイムカードテーブルに登録する
     // @param tv 画面から入力された従業員の登録内容
-    // @return バリデーションや登録処理中に発生したエラーのリスト
-    public List<String> create(TimecardView tv){
+    public void create(TimecardView tv){
 
         // 登録日時、更新日時は現在時刻を設定する
         LocalDateTime now = LocalDateTime.now();
         tv.setCreated_at(now);
         tv.setUpdated_at(now);
 
-        // 登録内容のバリデーションを行う
-        List<String> errors = TimecardValidator.validate(this, tv);
+        // データを登録する
+        em.getTransaction().begin();
+        em.persist(TimecardConverter.toModel(tv));
+        em.getTransaction().commit();
 
-        // バリデーションエラーがなければデータを登録する
-        if(errors.size() == 0) {
-            em.getTransaction().begin();
-            em.persist(TimecardConverter.toModel(tv));
-            em.getTransaction().commit();
-        }
-
-        // エラーを返却(なければ0件のリスト)
-        return errors;
     }
 
     // タイムカードの更新内容を元にデータを1件作成し、タイムカードテーブルを更新する
     // @param tv 画面から入力されたタイムカードの登録内容
-    // @return バリエーションや更新処理中に発生したエラーのリスト
-    public List<String> update(TimecardView tv){
+    public void update(TimecardView tv){
         // idを条件に登録済みのタイムカード情報を取得する
         TimecardView savedTim = findOne(tv.getId());
 
@@ -110,19 +100,13 @@ public class TimecardService extends ServiceBase {
         LocalDateTime now = LocalDateTime.now();
         savedTim.setUpdated_at(now);
 
-        // 更新内容についてバリデーションを行う
-        List<String> errors = TimecardValidator.validate(this, savedTim);
 
-        // バリエーションエラーがなければデータを更新する
-        if(errors.size() == 0) {
-            em.getTransaction().begin();
-            Timecard t = findOneInternal(tv.getId());
-            TimecardConverter.copyViewToModel(t, tv);
-            em.getTransaction().commit();
-        }
+        // データを更新する
+        em.getTransaction().begin();
+        Timecard t = findOneInternal(tv.getId());
+        TimecardConverter.copyViewToModel(t, tv);
+        em.getTransaction().commit();
 
-        // エラーを返却(エラーがなければ0件の空リスト)
-        return errors;
 
     }
 
